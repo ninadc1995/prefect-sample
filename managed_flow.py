@@ -3,7 +3,9 @@ from time import sleep
 
 from prefect import flow, task
 from prefect.tasks import task_input_hash
+from prefect.cache_policies import TASK_SOURCE, INPUTS
 
+cache_policy = (TASK_SOURCE + INPUTS).configure(key_storage="./cache/storage")
 
 @task(cache_key_fn=task_input_hash, cache_expiration=timedelta(seconds=300), log_prints=True)
 def run_expensive_task(x: int):
